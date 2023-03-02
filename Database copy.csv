@@ -1,0 +1,6 @@
+Reagent,Solvent,Reactant,Products,Pressure (atm),Temperature (K),Reaction SMILES,Volatility,Publication Year,Yield
+,methylene chloride,"4-hydroxypiperidine	triethylamine	methanesulfonyl chloride",??,,,CCOC,,,88.3
+,toluene,"1,2,3,4-tetrahydroquinoline	6-bromohexanol	potassium carbonate","N-Hydroxyhexyl-1,2,3,4-tetrahydroquinoline",,ambient,COC,,,
+,methylene chloride,"4-(3-aminopropylthio)pyridine dihydrochloride	triethylamine	propionyl chloride",??,,ambient,CCOC,,,74.2
+,"THF 	tetrahydrofuran","oxalic chloride	2,3,4,5-tetrahydro-1H-1-benzazepine","4,5,6,7-Tetrahydroazepino[3,2,1-hi]indole-1,2-dione",,,COC,,,
+,"tetrahydrofuran	diisopropyl ether","5-benzyloxy-2-vinyl-4-pyridone	pyrrolidine",5-benzyloxy-2-[2-(1-pyrrolidinyl)ethyl]4-pyridone,,,COC,,,
