@@ -5,8 +5,6 @@ from rdkit import DataStructs
 import plotly as px
 import ord_schema
 
-
-
 # Opening the reaction database
 database = pd.read_csv(r'/Users/maxbutterworth/Library/CloudStorage/OneDrive-TheUniversityofNottingham/Nottingham/Year 3/Synoptic Module/Research Project/Solvent-Selection/Test Database.csv')
 database = database.to_numpy() # Assigning Pandas database to numpy array
