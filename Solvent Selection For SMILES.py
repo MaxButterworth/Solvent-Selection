@@ -3,6 +3,7 @@ from rdkit import Chem
 from rdkit import DataStructs
 from ord_schema import message_helpers
 from ord_schema.proto import dataset_pb2
+import math
 
 # Opening the reaction database
 data = message_helpers.load_message('ord_dataset-00005539a1e04c809a9a78647bea649c.pb.gz', dataset_pb2.Dataset)
@@ -23,7 +24,7 @@ solvents = df['inputs["Solvent"].components[0].identifiers[0].value']
 catalysts1 = df['inputs["metal and ligand"].components[0].identifiers[0].value'] # Assume this is a catalyst
 catalysts2 = df['inputs["metal and ligand"].components[1].identifiers[0].value']
 base = df['inputs["Base"].components[0].identifiers[0].value']
-yeild = df['outcomes[0].products[0].measurements[0].percentage.value']
+yields = df['outcomes[0].products[0].measurements[0].percentage.value']
 
 # Defining empty arrays to append the fingerprints for the ORD dataset
 reactants1_fps = []
@@ -86,12 +87,17 @@ def Solvent_Selection(reactant1, reactant2, product1):
     # Return the highest similarity score, the corresponding reaction SMILES and the correspoding solvent
     return top_3_sim, top_3_indices
 
-#sim, indices = Solvent_Selection("CC(C)(C)C1=CC=C(C=C1)B(O)O", "BrC1=CC=CC=C1C=O", "CC(C)(C)C1=CC=C(C=C1)C1=C(C=O)C=CC=C1") # From this paper: https://doi.org/10.1021/acs.orglett.7b00386
+#sim, indices = Solvent_Selection("CC(C)(C)C1=CC=C(C=C1)B(O)O", "BrC1=CC=CC=C1C=O", "CC(C)(C)C1=CC=C(C=C1)C1=C(C=O)C=CC=C1") # From this paper: https://doi.org/10.1021/acs.joc.1c00871
 
 def Predict_Reaction_Solvent(reactant1, reactant2, product1):
     sim, indices = Solvent_Selection(reactant1, reactant2, product1)
-    print(f'The most similar reaction in the database has a similarity score of {sim[0]} with a yield of . The recommended solvent is {solvents[indices[0]]}.')
+    print(f'The most similar reaction in the database has a similarity score of {round(sim[0], 5)}. The recommended solvent is {solvents[indices[0]]}.')
+    
     print('')
-    print(f'The second most similar reaction in the database has a similarity score of {sim[1]}. The second recommended solvent is {solvents[indices[1]]}.')
+    
+    print(f'The second most similar reaction in the database has a similarity score of {round(sim[1], 5)}. The second recommended solvent is {solvents[indices[1]]}.')
+    
     print('')
-    print(f'The third most similar reaction in the database has a similarity score of {sim[2]}. The third recommended solvent is {solvents[indices[2]]}.')     
+    
+    print(f'The third most similar reaction in the database has a similarity score of {round(sim[2], 5)}. The third recommended solvent is {solvents[indices[2]]}.')   
+    
