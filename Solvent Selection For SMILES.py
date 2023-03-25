@@ -41,7 +41,7 @@ for x in range(0, len(reactants1)):
     
     products1_ms = Chem.rdmolfiles.MolFromSmiles(products1[x])
     products1_fps.append(Chem.RDKFingerprint(products1_ms))
-
+    
 ms = [] # Defining the molecular SMILES list
 fps = [] # Defining the fingerprints list
 sim_scores = [] # Defining a similarity scores list
