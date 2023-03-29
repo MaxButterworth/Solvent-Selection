@@ -3,7 +3,6 @@ from rdkit import Chem
 from rdkit import DataStructs
 from ord_schema import message_helpers
 from ord_schema.proto import dataset_pb2
-import math
 
 # Opening the reaction database
 data = message_helpers.load_message('ord_dataset-00005539a1e04c809a9a78647bea649c.pb.gz', dataset_pb2.Dataset)
