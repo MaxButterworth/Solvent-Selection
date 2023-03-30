@@ -51,16 +51,16 @@ for y in range(0, len(temps)):
     temp_value = temps[y]
     
     if np.isnan(temp_value)==True:
-        sus_temp.append(0) # A value of zero means temperature data is not available
+        sus_temp.append('No Data') # A value of zero means temperature data is not available
     
     elif 0 <= temp_value <= 70:
-        sus_temp.append(1) # A value of one is given a green lable, i.e. most sustainable
+        sus_temp.append('Recommended') # A value of one is given a green lable, i.e. most sustainable
     
     elif -20 <= temp_value < 0 or 70 < temp_value <= 140:
-        sus_temp.append(2) # A value of two is given a yellow lable
+        sus_temp.append('Problematic') # A value of two is given a yellow lable
     
     else:
-        sus_temp.append(3) # A value of three is given a green lable, i.e. least sustainable
+        sus_temp.append('Hazardous') # A value of three is given a green lable, i.e. least sustainable
   
 # Defining a function to search the reaction
 def Solvent_Selection(reactant1, reactant2, product1):
@@ -103,8 +103,6 @@ def Solvent_Selection(reactant1, reactant2, product1):
     # Return the highest similarity score, the corresponding reaction SMILES and the correspoding solvent
     return top_5_sim, top_5_indices
 
-#sim, indices = Solvent_Selection("CC(C)(C)C1=CC=C(C=C1)B(O)O", "BrC1=CC=CC=C1C=O", "CC(C)(C)C1=CC=C(C=C1)C1=C(C=O)C=CC=C1") # From this paper: https://doi.org/10.1021/acs.joc.1c00871
-
 def Predict_Reaction_Solvent(reactant1, reactant2, product1):
     sim, indices = Solvent_Selection(reactant1, reactant2, product1)
     
@@ -119,6 +117,8 @@ def Predict_Reaction_Solvent(reactant1, reactant2, product1):
     
     output = pd.DataFrame(results, y_labels, x_labels)
     
+    output.style
+    
     print(output)
 
 # Allowing for user input of reaction SMILES and running the algorithm
@@ -127,3 +127,6 @@ reactant2 = input('Input the second reactant in SMILES format: ')
 product1 = input('Input the product in SMILES format: ')
 
 Predict_Reaction_Solvent(reactant1, reactant2, product1)
+
+# Test input
+#sim, indices = Solvent_Selection("CC(C)(C)C1=CC=C(C=C1)B(O)O", "BrC1=CC=CC=C1C=O", "CC(C)(C)C1=CC=C(C=C1)C1=C(C=O)C=CC=C1") # From this paper: https://doi.org/10.1021/acs.joc.1c00871
