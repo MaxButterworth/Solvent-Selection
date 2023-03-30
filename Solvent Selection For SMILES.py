@@ -61,7 +61,10 @@ for y in range(0, len(temps)):
     
     else:
         sus_temp.append('Hazardous') # A value of three is given a green lable, i.e. least sustainable
-  
+
+for z in range(0, len(solvents):
+    solvents_ms = Chem.rdmolfiles.MolFromSmiles(solvents[z])
+               
 # Defining a function to search the reaction
 def Solvent_Selection(reactant1, reactant2, product1):
     
