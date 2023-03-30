@@ -8,6 +8,7 @@ import math
 # Opening the reaction database
 data = message_helpers.load_message('ord_dataset-00005539a1e04c809a9a78647bea649c.pb.gz', dataset_pb2.Dataset)
 df = message_helpers.messages_to_dataframe(data.reactions, drop_constant_columns=True) # Assigning data to a Pandas dataframe, df
+sustainability_data = open('sustainability_scores.csv')
 
 # Defining an array for the reaction identifiers in ORD dataset
 identify = df['identifiers[1].value']
