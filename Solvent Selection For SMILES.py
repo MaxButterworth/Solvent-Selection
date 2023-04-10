@@ -7,7 +7,9 @@ from ord_schema.proto import dataset_pb2
 
 # Opening the reaction database
 data = message_helpers.load_message('ord_dataset-00005539a1e04c809a9a78647bea649c.pb.gz', dataset_pb2.Dataset)
+sus_data = pd.read_excel(r'C:\Users\Owner\Desktop\sustainability_scores.xlsx')
 df = message_helpers.messages_to_dataframe(data.reactions, drop_constant_columns=True) # Assigning data to a Pandas dataframe, df
+
 
 # Defining an array for the reaction identifiers in ORD dataset
 identify = df['identifiers[1].value']
@@ -62,8 +64,10 @@ for y in range(0, len(temps)):
     else:
         sus_temp.append('Hazardous') # A value of three is given a green lable, i.e. least sustainable
 
+# Converting each solvent SMILES to fingerprints
 for z in range(0, len(solvents):
     solvents_ms = Chem.rdmolfiles.MolFromSmiles(solvents[z])
+    solvent_susscore
                
 # Defining a function to search the reaction
 def Solvent_Selection(reactant1, reactant2, product1):
