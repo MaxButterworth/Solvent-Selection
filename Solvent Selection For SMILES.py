@@ -7,9 +7,15 @@ from ord_schema.proto import dataset_pb2
 
 # Opening the reaction database
 data = message_helpers.load_message('ord_dataset-00005539a1e04c809a9a78647bea649c.pb.gz', dataset_pb2.Dataset)
-sus_data = pd.read_excel(r'C:\Users\Owner\Desktop\sustainability_scores.xlsx')
 df = message_helpers.messages_to_dataframe(data.reactions, drop_constant_columns=True) # Assigning data to a Pandas dataframe, df
 
+# Opening the sustainability scores excel sheet
+sus_data = pd.read_excel(r'C:\Users\Owner\Desktop\sustainability_scores.xlsx', sheet_name='SUS')
+susdf = pd.DataFrame(sus_data)
+susdf = susdf.astype({'SMILES': 'string'})
+
+# Obtains the SMILES for the solvents in the sustainability score sheet
+solvents_excel = susdf['SMILES']
 
 # Defining an array for the reaction identifiers in ORD dataset
 identify = df['identifiers[1].value']
@@ -65,9 +71,14 @@ for y in range(0, len(temps)):
         sus_temp.append('Hazardous') # A value of three is given a green lable, i.e. least sustainable
 
 # Converting each solvent SMILES to fingerprints
-for z in range(0, len(solvents):
-    solvents_ms = Chem.rdmolfiles.MolFromSmiles(solvents[z])
-    solvent_susscore
+SMILESdf = []
+for z in range(0, len(solvents_excel)):
+    solventSMILES = Chem.CanonSmiles(solvents_excel[z])
+    SMILESdf.append(solventSMILES)
+
+# Creates a new column with the canonical smiles
+susdf['canonSMILES'] = SMILESdf
+        
                
 # Defining a function to search the reaction
 def Solvent_Selection(reactant1, reactant2, product1):
