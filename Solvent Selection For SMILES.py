@@ -5,6 +5,12 @@ from rdkit import DataStructs
 from ord_schema import message_helpers
 from ord_schema.proto import dataset_pb2
 
+# Setting the dimensions for output
+desired_width = 320
+pd.set_option('display.width', desired_width)
+np.set_printoptions(linewidth=desired_width)
+pd.set_option('display.max_columns', 10)
+
 # Opening the reaction database
 data = message_helpers.load_message('ord_dataset-00005539a1e04c809a9a78647bea649c.pb.gz', dataset_pb2.Dataset)
 df = message_helpers.messages_to_dataframe(data.reactions, drop_constant_columns=True) # Assigning data to a Pandas dataframe, df
@@ -14,7 +20,7 @@ sus_data = pd.read_excel(r'C:\Users\Owner\Desktop\sustainability_scores.xlsx', s
 susdf = pd.DataFrame(sus_data)
 susdf = susdf.astype({'SMILES': 'string'})
 
-# Obtains the SMILES for the solvents in the sustainability score sheet
+# Obtains the SMILES for the solvents in the excel sustainability scores sheet
 solvents_excel = susdf['SMILES']
 
 # Defining an array for the reaction identifiers in ORD dataset
@@ -70,14 +76,42 @@ for y in range(0, len(temps)):
     else:
         sus_temp.append('Hazardous') # A value of three is given a green lable, i.e. least sustainable
 
-# Converting each solvent SMILES to fingerprints
-SMILESdf = []
+# Converting each solvent SMILES from sustainability scores excel into fingerprints
+excel_fps = []
 for z in range(0, len(solvents_excel)):
-    solventSMILES = Chem.CanonSmiles(solvents_excel[z])
-    SMILESdf.append(solventSMILES)
-
-# Creates a new column with the canonical smiles
-susdf['canonSMILES'] = SMILESdf
+    solventSMILES_ms = Chem.rdmolfiles.MolFromSmiles(solvents_excel[z])
+    excel_fps.append(Chem.RDKFingerprint(solventSMILES_ms))
+    
+# Converting each solvent from the database into fingerprints
+solvents_fps = []
+solvents = solvents.fillna(0)
+for v in range (0, len(solvents)):
+    if solvents[v] == 0:
+        solvents_ms = 0
+        solvents_fps.append('0')
+    else:
+        solvents_ms = Chem.rdmolfiles.MolFromSmiles(solvents[v])
+        solvents_fps.append(Chem.RDKFingerprint(solvents_ms))
+        
+        
+# Matching the similarity of solvents from the dataset with the excel sustainability scores data with similarity = 1
+solvent_similarity = []
+matching_solvents = []
+sus_solvent = []
+for z in range (0, len(solvents_fps)):
+    if solvents_fps[z] == '0':
+        sus_solvent.insert(z, 'N/A')
+        matching_solvents. append(z)
+    else:
+        for h in range(0, len(excel_fps)):
+            solvent_similarity = (DataStructs.FingerprintSimilarity(excel_fps[h], solvents_fps[z]))
+            if solvent_similarity == 1.0:
+                k = h
+                sus_solvent.insert(z,susdf.at[susdf.index[k],'Ranking by default'])
+                matching_solvents.append(z)
+    if z not in matching_solvents:
+        sus_solvent.insert(z, 'N/A')
+        
         
                
 # Defining a function to search the reaction
@@ -124,14 +158,14 @@ def Solvent_Selection(reactant1, reactant2, product1):
 def Predict_Reaction_Solvent(reactant1, reactant2, product1):
     sim, indices = Solvent_Selection(reactant1, reactant2, product1)
     
-    x_labels = ['Reaction Similarity Score', 'Suggested Solvent', 'Temperature Sustainability Rating']
+    x_labels = ['Reaction Similarity Score', 'Suggested Solvent', 'Temperature Sustainability Rating', 'Solvent Sustainability Rating']
     y_labels = ['Reaction 1', 'Reaction 2', 'Reaction 3', 'Reaction 4', 'Reaction 5']
-    
-    results = [[round(sim[0], 5), solvents[indices[0]], sus_temp[indices[0]]],
-               [round(sim[1], 5), solvents[indices[1]], sus_temp[indices[1]]],
-               [round(sim[2], 5), solvents[indices[2]], sus_temp[indices[2]]],
-               [round(sim[3], 5), solvents[indices[3]], sus_temp[indices[3]]],
-               [round(sim[4], 5), solvents[indices[4]], sus_temp[indices[4]]]]
+
+    results = [[round(sim[0], 5), solvents[indices[0]], sus_temp[indices[0]], sus_solvent[indices[0]]],
+               [round(sim[1], 5), solvents[indices[1]], sus_temp[indices[1]], sus_solvent[indices[1]]],
+               [round(sim[2], 5), solvents[indices[2]], sus_temp[indices[2]], sus_solvent[indices[2]]],
+               [round(sim[3], 5), solvents[indices[3]], sus_temp[indices[3]], sus_solvent[indices[3]]],
+               [round(sim[4], 5), solvents[indices[4]], sus_temp[indices[4]], sus_solvent[indices[4]]]]
     
     output = pd.DataFrame(results, y_labels, x_labels)
     
