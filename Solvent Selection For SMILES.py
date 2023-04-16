@@ -16,7 +16,7 @@ data = message_helpers.load_message('ord_dataset-00005539a1e04c809a9a78647bea649
 df = message_helpers.messages_to_dataframe(data.reactions, drop_constant_columns=True) # Assigning data to a Pandas dataframe, df
 
 # Opening the sustainability scores excel sheet
-sus_data = pd.read_excel(r'C:\Users\Owner\Desktop\sustainability_scores.xlsx', sheet_name='SUS')
+sus_data = pd.read_excel(r'sustainability_scores.xlsx', sheet_name='SUS')
 susdf = pd.DataFrame(sus_data)
 susdf = susdf.astype({'SMILES': 'string'})
 
@@ -52,7 +52,7 @@ sus_temp = [] # List to append sustainability ratings for reaction temperature
 # Converting ORD dataset SMILES to fingerprints
 for x in range(0, len(reactants1)):
     reactants1_ms = Chem.rdmolfiles.MolFromSmiles(reactants1[x])
-    reactants1_fps.append( Chem.RDKFingerprint(reactants1_ms))
+    reactants1_fps.append(Chem.RDKFingerprint(reactants1_ms))
     
     reactants2_ms = Chem.rdmolfiles.MolFromSmiles(reactants2[x])
     reactants2_fps.append(Chem.RDKFingerprint(reactants2_ms))
@@ -101,7 +101,7 @@ sus_solvent = []
 for z in range (0, len(solvents_fps)):
     if solvents_fps[z] == '0':
         sus_solvent.insert(z, 'N/A')
-        matching_solvents. append(z)
+        matching_solvents.append(z)
     else:
         for h in range(0, len(excel_fps)):
             solvent_similarity = (DataStructs.FingerprintSimilarity(excel_fps[h], solvents_fps[z]))
@@ -111,8 +111,6 @@ for z in range (0, len(solvents_fps)):
                 matching_solvents.append(z)
     if z not in matching_solvents:
         sus_solvent.insert(z, 'N/A')
-        
-        
                
 # Defining a function to search the reaction
 def Solvent_Selection(reactant1, reactant2, product1):
@@ -122,7 +120,7 @@ def Solvent_Selection(reactant1, reactant2, product1):
     search_fps = [] # Array for fingerprints to compare to database reaction fingerprints
     
     similarity_scores = [] # Array to append similarity scores
-    k = 0 # Set up counter for top three similarity scores sorting loop
+    k = 0 # Set up counter for top five similarity scores sorting loop
     top_5_sim = [] # Array for top three indices
     top_5_indices = [] # Array for indices of top three similarities
     
