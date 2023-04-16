@@ -16,7 +16,7 @@ data = message_helpers.load_message('ord_dataset-00005539a1e04c809a9a78647bea649
 df = message_helpers.messages_to_dataframe(data.reactions, drop_constant_columns=True) # Assigning data to a Pandas dataframe, df
 
 # Opening the sustainability scores excel sheet
-sus_data = pd.read_excel(r'sustainability_scores.xlsx', sheet_name='SUS')
+sus_data = pd.read_excel(r'Solvent_Sustainability_Scores.xlsx', sheet_name='SUS')
 susdf = pd.DataFrame(sus_data)
 susdf = susdf.astype({'SMILES': 'string'})
 
@@ -93,7 +93,6 @@ for v in range (0, len(solvents)):
         solvents_ms = Chem.rdmolfiles.MolFromSmiles(solvents[v])
         solvents_fps.append(Chem.RDKFingerprint(solvents_ms))
         
-        
 # Matching the similarity of solvents from the dataset with the excel sustainability scores data with similarity = 1
 solvent_similarity = []
 matching_solvents = []
@@ -107,7 +106,7 @@ for z in range (0, len(solvents_fps)):
             solvent_similarity = (DataStructs.FingerprintSimilarity(excel_fps[h], solvents_fps[z]))
             if solvent_similarity == 1.0:
                 k = h
-                sus_solvent.insert(z,susdf.at[susdf.index[k],'Ranking by default'])
+                sus_solvent.insert(z, susdf.at[susdf.index[k],'Ranking by default'])
                 matching_solvents.append(z)
     if z not in matching_solvents:
         sus_solvent.insert(z, 'N/A')
