@@ -34,6 +34,7 @@ products1_fps = []
 
 # Defining empty arrays for sustainability metrics
 sus_temp = [] # List to append sustainability ratings for reaction temperature
+yieldband = [] # List to append yield sustainability bands
 
 # Converting ORD dataset SMILES to fingerprints
 for x in range(0, len(reactants1)):
@@ -54,13 +55,25 @@ for y in range(0, len(temps)):
         sus_temp.append('No Data') # A value of zero means temperature data is not available
     
     elif 0 <= temp_value <= 70:
-        sus_temp.append('Recommended') # A value of one is given a green lable, i.e. most sustainable
+        sus_temp.append('Recommended') # A value of one is given a green label, i.e. most sustainable
     
     elif -20 <= temp_value < 0 or 70 < temp_value <= 140:
-        sus_temp.append('Problematic') # A value of two is given a yellow lable
+        sus_temp.append('Problematic') # A value of two is given a yellow label
     
     else:
-        sus_temp.append('Hazardous') # A value of three is given a green lable, i.e. least sustainable
+        sus_temp.append('Hazardous') # A value of three is given a red label, i.e. least sustainable
+        
+for z in range(0, len(yields)):
+    yield_value = yields[z]
+    
+    if yield_value > 0.89:
+        yieldband.append('Green') # Given a green label, i.e. most sustainable
+    elif 0.70 <= yield_value <= 0.89:
+        yieldband.append('Amber') # Given a amber label
+    elif yield_value < 0.70:
+        yieldband.append('Red') # Given a red label, i.e. least sustainable
+    else:
+        yieldband.append('No Data') # Yield data is not available
   
 # Defining a function to search the reaction
 def Solvent_Selection(reactant1, reactant2, product1):
@@ -106,14 +119,14 @@ def Solvent_Selection(reactant1, reactant2, product1):
 def Predict_Reaction_Solvent(reactant1, reactant2, product1):
     sim, indices = Solvent_Selection(reactant1, reactant2, product1)
     
-    x_labels = ['Reaction Similarity Score', 'Suggested Solvent', 'Temperature Sustainability Rating']
+    x_labels = ['Reaction Similarity Score', 'Suggested Solvent', 'Temperature Sustainability Rating', 'Yield Sustainability Rating']
     y_labels = ['Reaction 1', 'Reaction 2', 'Reaction 3', 'Reaction 4', 'Reaction 5']
     
-    results = [[round(sim[0], 5), solvents[indices[0]], sus_temp[indices[0]]],
-               [round(sim[1], 5), solvents[indices[1]], sus_temp[indices[1]]],
-               [round(sim[2], 5), solvents[indices[2]], sus_temp[indices[2]]],
-               [round(sim[3], 5), solvents[indices[3]], sus_temp[indices[3]]],
-               [round(sim[4], 5), solvents[indices[4]], sus_temp[indices[4]]]]
+    results = [[round(sim[0], 5), solvents[indices[0]], sus_temp[indices[0]], yieldband[indices[0]]],
+               [round(sim[1], 5), solvents[indices[1]], sus_temp[indices[1]], yieldband[indices[1]]],
+               [round(sim[2], 5), solvents[indices[2]], sus_temp[indices[2]], yieldband[indices[2]]],
+               [round(sim[3], 5), solvents[indices[3]], sus_temp[indices[3]], yieldband[indices[3]]],
+               [round(sim[4], 5), solvents[indices[4]], sus_temp[indices[4]], yieldband[indices[4]]]]
     
     output = pd.DataFrame(results, y_labels, x_labels)
     
