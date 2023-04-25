@@ -132,7 +132,7 @@ def Predict_Reaction_Solvent(reactant1, reactant2, product1):
     
     output.style
     
-    #print(output)
+    print(output)
     
     return results
 
@@ -196,20 +196,13 @@ def Predict_Reaction_Solvent_Single(reactant1, product1):
     
     return results
 
-
-
 # Allowing for user input of reaction SMILES and running the algorithm
-#reactant1 = input('Input the first reactant in SMILES format: ')
-#reactant2 = input('Input the second reactant in SMILES format: ')
-#product1 = input('Input the product in SMILES format: ')
+reactant1 = input('Input the first reactant in SMILES format: ')
+reactant2 = input('Input the second reactant in SMILES format: ')
+product1 = input('Input the product in SMILES format: ')
 
-#Predict_Reaction_Solvent(reactant1, reactant2, product1)
-#Predict_Reaction_Solvent_Single(reactant1, product1)
+Predict_Reaction_Solvent(reactant1, reactant2, product1)
+Predict_Reaction_Solvent_Single(reactant1, product1)
 
 # Test input
 #sim, indices = Solvent_Selection("CC(C)(C)C1=CC=C(C=C1)B(O)O", "BrC1=CC=CC=C1C=O", "CC(C)(C)C1=CC=C(C=C1)C1=C(C=O)C=CC=C1") # From this paper: https://doi.org/10.1021/acs.joc.1c00871
-
-
-
-
-
