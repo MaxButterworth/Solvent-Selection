@@ -1,0 +1,4 @@
+# Solvent-Selection
+A repository containing all code produced during the development of our solvent selection algorithm.
+
+The algorithm first imports a subset of reactions from the Open Reaction Database (ORD) and sorts them into appropiate categories to aid ease of data manipulation. The algorithm then analyses each reaction's yield, temperature, and solvent for their sustainability according to criteria set out by the CHEM21 consortium. Next, the algorithm then converts the SMILES representation of reactants and products in the ORD dataset into fingerprints at which point for the similarity between the user's input reaction and all those contained within the ORD dataset is eveluated. Finally, the five most similar reactions are presented to the user along with the suggested solvent determined each reaction, and the solvent, yield and temperature sustainability scores.
